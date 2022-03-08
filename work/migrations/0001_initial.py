@@ -42,8 +42,16 @@ class Migration(migrations.Migration):
                 ('salary_min', models.IntegerField()),
                 ('salary_max', models.IntegerField()),
                 ('posted', models.DateField()),
-                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vacancies', to='work.company')),
-                ('speciality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vacancies', to='work.specialty')),
+                ('company', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='vacancies',
+                    to='work.company')
+                 ),
+                ('speciality', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='vacancies',
+                    to='work.specialty')
+                 ),
             ],
         ),
     ]

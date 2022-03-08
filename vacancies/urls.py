@@ -19,10 +19,13 @@ import work.views as view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', view.main_view),
-    path('company/<int:id>/', view.company_view),
-    path('vacancy/<int:id>/', view.vacancy_view),
-    path('vacancies/', view.list_vacancies_view),
-    path('vacancies/cat/<str:category>/', view.vacancy_cat_view),
+    path('', view.main_view, name='main'),
+    path('company/<int:id>/', view.company_view, name='company'),
+    path('vacancy/<int:id>/', view.vacancy_view, name='vacancy'),
+    path('vacancies/', view.list_vacancies_view, name='vacancies'),
+    path('vacancies/cat/<str:category>/', view.vacancy_cat_view, name='vac_cat'),
 
 ]
+
+handler404 = view.custom404
+handler500 = view.custom500
