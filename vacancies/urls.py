@@ -15,17 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 import work.views as view
+import accounts.views as acc
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', view.main_view, name='main'),
-    path('company/<int:id>/', view.company_view, name='company'),
-    path('vacancy/<int:id>/', view.vacancy_view, name='vacancy'),
+    path('company/<int:identificator>/', view.company_view, name='company'),
+    path('vacancy/<int:identificator>/', view.vacancy_view, name='vacancy'),
     path('vacancies/', view.list_vacancies_view, name='vacancies'),
     path('vacancies/cat/<str:category>/', view.vacancy_cat_view, name='vac_cat'),
-
+    path('register', acc.SignUpView.as_view(), name='register'),
+    path('login', acc.MyLoginView.as_view(), name='login'),
+    path('logout', acc.logout_user, name='logout'),
 ]
 
 handler404 = view.custom404
 handler500 = view.custom500
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

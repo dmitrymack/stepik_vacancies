@@ -1,5 +1,8 @@
 {% extends "work/base.html" %}
 {% block content %}
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
   <main class="container mt-3">
     <section>
       <h1 class="h1 text-center mx-auto mt-4 pt-5" style="font-size: 70px;"><strong>Все вакансии</strong></h1>
@@ -17,7 +20,7 @@
                   <p class="text-muted pt-1">{{ vac.posted }}</p>
                 </div>
                 <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end">
-                  <a href="{% url 'vacancy' vac.id %}"><img src="../static/{{ vac.company.logo }}" width="130" height="80" alt=""></a>
+                  <a href="{% url 'vacancy' vac.id %}"><img src="{{ STATIC_URL }}{{ vac.company.logo }}" width="130" height="80" alt=""></a>
                 </div>
               </div>
             </div>

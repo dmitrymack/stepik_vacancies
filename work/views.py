@@ -11,52 +11,52 @@ def main_view(request):
     companies = mdl.Company.objects.all()
     return render(request, "work/index.html", context={
         "specialities": specialities,
-        "companies": companies
+        "companies": companies,
     })
 
 
-def company_view(request, id):
+def company_view(request, identificator):
     try:
-        company = mdl.Company.objects.get(id=id)
-        vac_of_comp = mdl.Vacancy.objects.filter(company__id=id)
-        return render(request, "work/company.html", context={
-            "company": company,
-            "vacancies": vac_of_comp,
-            "count": len(vac_of_comp)
-        })
+        company = mdl.Company.objects.get(id=identificator)
     except mdl.Company.DoesNotExist:
         raise Http404
+    vac_of_comp = mdl.Vacancy.objects.filter(company__id=identificator)
+    return render(request, "work/company.html", context={
+        "company": company,
+        "vacancies": vac_of_comp,
+        "count": len(vac_of_comp),
+     })
 
 
-def vacancy_view(request, id):
+def vacancy_view(request, identificator):
     try:
-        vacancy = mdl.Vacancy.objects.get(id=id)
-        return render(request, "work/vacancy.html", context={
-            "vacancy": vacancy
-        })
+        vacancy = mdl.Vacancy.objects.get(id=identificator)
     except mdl.Vacancy.DoesNotExist:
         raise Http404
+    return render(request, "work/vacancy.html", context={
+        "vacancy": vacancy,
+     })
 
 
 def list_vacancies_view(request):
     vacancies = mdl.Vacancy.objects.all()
     return render(request, "work/vacancies.html", context={
         "vacancies": vacancies,
-        "count": len(vacancies)
+        "count": len(vacancies),
     })
 
 
 def vacancy_cat_view(request, category):
     try:
         spec = mdl.Specialty.objects.get(code=category)
-        vacancies = mdl.Vacancy.objects.filter(speciality=spec.id)
-        return render(request, "work/vacancy_cat.html", context={
-            "spec": spec,
-            "vacancies": vacancies,
-            "count": len(vacancies)
-        })
     except mdl.Specialty.DoesNotExist:
         raise Http404
+    vacancies = mdl.Vacancy.objects.filter(speciality=spec.id)
+    return render(request, "work/vacancy_cat.html", context={
+        "spec": spec,
+        "vacancies": vacancies,
+        "count": len(vacancies),
+    })
 
 
 def custom404(request, exception):

@@ -16,12 +16,12 @@ class Command(BaseCommand):
                 location=company['location'],
                 logo=company['logo'],
                 description=company['description'],
-                employee_count=company['employee_count']
+                employee_count=company['employee_count'],
             )
         for spec in data.specialties:
             mdl.Specialty.objects.create(
                 code=spec['code'],
-                title=spec['title']
+                title=spec['title'],
             )
         for vac in data.jobs:
             mdl.Vacancy.objects.create(
@@ -32,5 +32,5 @@ class Command(BaseCommand):
                 description=vac['description'],
                 salary_min=vac['salary_from'],
                 salary_max=vac['salary_to'],
-                posted=vac['posted']
+                posted=vac['posted'],
             )
