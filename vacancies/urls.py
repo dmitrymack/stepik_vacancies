@@ -27,6 +27,9 @@ urlpatterns = [
     path('vacancy/<int:identificator>/', view.vacancy_view, name='vacancy'),
     path('vacancies/', view.list_vacancies_view, name='vacancies'),
     path('vacancies/cat/<str:category>/', view.vacancy_cat_view, name='vac_cat'),
+    path('mycompany/letsstart/', view.company_create, name='comp_create'),
+    path('mycompany/edit/', view.company_edit, name='comp_edit'),
+
     path('register', acc.SignUpView.as_view(), name='register'),
     path('login', acc.MyLoginView.as_view(), name='login'),
     path('logout', acc.logout_user, name='logout'),

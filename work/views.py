@@ -1,6 +1,7 @@
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 import work.models as mdl
+from work.forms import CompanyForm
 
 # Не смог придумать, как вывести количество вакансий по компаниям
 # и специальностям на главной странице
@@ -56,6 +57,39 @@ def vacancy_cat_view(request, category):
         "spec": spec,
         "vacancies": vacancies,
         "count": len(vacancies),
+    })
+
+
+def company_create(request):
+    try:
+        mdl.Company.objects.get(owner__id=request.user.id)
+        return redirect('comp_edit')
+    except mdl.Company.DoesNotExist:
+        return render(request, "work/company-create.html")
+
+
+def company_edit(request):
+    try:
+        instance = mdl.Company.objects.get(owner__id=request.user.id)
+    except mdl.Company.DoesNotExist:
+        instance = {}
+    if request.method == 'POST':
+        form = CompanyForm(request.POST or None, request.FILES, instance=instance)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.owner = request.user
+            f.save()
+            return redirect('main')
+    else:
+        form = CompanyForm(initial={
+            'name': instance.name,
+            'logo': instance.logo,
+            'location': instance.location,
+            'employee_count': instance.employee_count,
+            'description': instance.description
+        })
+    return render(request, "work/company-edit.html", context={
+        'form': form,
     })
 
 
