@@ -1,7 +1,7 @@
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 import work.models as mdl
-from work.forms import CompanyForm, VacancyForm
+from work.forms import CompanyForm, VacancyForm, ApplicationForm
 from datetime import date
 from django.contrib.auth.decorators import login_required
 
@@ -41,6 +41,27 @@ def vacancy_view(request, identificator):
      })
 
 
+@login_required
+def vacancy_send_view(request, identificator):
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST or None)
+        try:
+            vacancy = mdl.Vacancy.objects.get(id=identificator)
+        except mdl.Vacancy.DoesNotExist:
+            raise Http404
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.vacancy = vacancy
+            f.user = request.user
+            f.save()
+            return redirect('main')
+    else:
+        form = ApplicationForm()
+    return render(request, "work/vacancy-send.html", context={
+        'form': form,
+    })
+
+
 def list_vacancies_view(request):
     vacancies = mdl.Vacancy.objects.all()
     return render(request, "work/vacancies.html", context={
@@ -61,6 +82,7 @@ def vacancy_cat_view(request, category):
         "count": len(vacancies),
     })
 
+
 @login_required
 def company_create(request):
     try:
@@ -68,6 +90,7 @@ def company_create(request):
         return redirect('comp_edit')
     except mdl.Company.DoesNotExist:
         return render(request, "work/company-create.html")
+
 
 @login_required
 def company_edit(request):
@@ -102,6 +125,7 @@ def mycomp_vacancy_list(request):
         'vacancies': vac_of_comp
     })
 
+
 @login_required
 def mycomp_vacancy_create(request):
 
@@ -122,9 +146,11 @@ def mycomp_vacancy_create(request):
         'form': form
     })
 
+
 @login_required
 def mycomp_vacancy_edit(request, identificator):
     instance = mdl.Vacancy.objects.get(id=identificator)
+    vac_response = mdl.Application.objects.filter(vacancy__id=identificator)
     if request.method == 'POST':
         form = VacancyForm(request.POST or None, instance=instance)
         if form.is_valid():
@@ -143,7 +169,9 @@ def mycomp_vacancy_edit(request, identificator):
             'description': instance.description,
         })
     return render(request, "work/vacancy_edit.html", context={
-        "form": form
+        "form": form,
+        "responses": vac_response,
+        "count_resp": len(vac_response)
     })
 
 

@@ -25,6 +25,7 @@ urlpatterns = [
     path('', view.main_view, name='main'),
     path('company/<int:identificator>/', view.company_view, name='company'),
     path('vacancy/<int:identificator>/', view.vacancy_view, name='vacancy'),
+    path('vacancy/<int:identificator>/send/', view.vacancy_send_view, name='vacancy_send'),
     path('vacancies/', view.list_vacancies_view, name='vacancies'),
     path('vacancies/cat/<str:category>/', view.vacancy_cat_view, name='vac_cat'),
     path('mycompany/letsstart/', view.company_create, name='comp_create'),

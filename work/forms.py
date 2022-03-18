@@ -26,3 +26,13 @@ class VacancyForm(ModelForm):
     class Meta:
         model = Vacancy
         fields = ('title', 'speciality', 'salary_min', 'salary_max', 'skills', 'description',)
+
+
+class ApplicationForm(ModelForm):
+    written_username = forms.CharField(label='Ваше ФИО', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    written_phone = forms.IntegerField(label='Ваш телефон')
+    written_cover_letter = forms.CharField(label='Сопроводительное письмо', widget=forms.Textarea(attrs={'class': 'form-input'}))
+
+    class Meta:
+        model = Application
+        fields = ('written_username', 'written_phone', 'written_cover_letter',)

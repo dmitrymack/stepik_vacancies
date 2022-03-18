@@ -21,6 +21,7 @@
                   <a href="{% url 'vacancy' vac.id %}"><img src="{{ vac.company.logo.url }}" width="130" height="80" alt=""></a>
                 </div>
               </div>
+              <a href="{% url 'vacancy' vac.id %}" class="btn btn-dark">Просмотр</a>
             </div>
           </div>
           {% endfor %}
