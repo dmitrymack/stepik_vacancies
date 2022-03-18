@@ -22,7 +22,7 @@ class Specialty(models.Model):
     picture = models.ImageField(default='https://place-hold.it/100x60', upload_to=MEDIA_SPECIALITY_IMAGE_DIR)
 
     def __str__(self):
-        pass
+        return self.title
 
 
 class Vacancy(models.Model):
@@ -41,7 +41,7 @@ class Vacancy(models.Model):
 
 class Application(models.Model):
     written_username = models.CharField(max_length=50)
-    written_phone = models.IntegerField(max_length=15)
+    written_phone = models.IntegerField()
     written_cover_letter = models.TextField()
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name='applications')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications')
