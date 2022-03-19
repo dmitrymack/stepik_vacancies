@@ -1,8 +1,9 @@
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 import work.models as mdl
 from work.forms import CompanyForm, VacancyForm, ApplicationForm
 from datetime import date
+from random import random
 from django.contrib.auth.decorators import login_required
 
 # Не смог придумать, как вывести количество вакансий по компаниям
@@ -11,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 def main_view(request):
     specialities = mdl.Specialty.objects.all()
-    companies = mdl.Company.objects.all()
+    companies = sorted(mdl.Company.objects.all(), key=lambda x: random())[:8]
     return render(request, "work/index.html", context={
         "specialities": specialities,
         "companies": companies,
@@ -50,10 +51,10 @@ def vacancy_send_view(request, identificator):
         except mdl.Vacancy.DoesNotExist:
             raise Http404
         if form.is_valid():
-            f = form.save(commit=False)
-            f.vacancy = vacancy
-            f.user = request.user
-            f.save()
+            form_s = form.save(commit=False)
+            form_s.vacancy = vacancy
+            form_s.user = request.user
+            form_s.save()
             return redirect('main')
     else:
         form = ApplicationForm()
@@ -101,18 +102,21 @@ def company_edit(request):
     if request.method == 'POST':
         form = CompanyForm(request.POST or None, request.FILES, instance=instance)
         if form.is_valid():
-            f = form.save(commit=False)
-            f.owner = request.user
-            f.save()
+            form_s = form.save(commit=False)
+            form_s.owner = request.user
+            form_s.save()
             return redirect('main')
     else:
-        form = CompanyForm(initial={
-            'name': instance.name,
-            'logo': instance.logo,
-            'location': instance.location,
-            'employee_count': instance.employee_count,
-            'description': instance.description
-        })
+        if not instance:
+            form = CompanyForm()
+        else:
+            form = CompanyForm(initial={
+                'name': instance.name,
+                'logo': instance.logo,
+                'location': instance.location,
+                'employee_count': instance.employee_count,
+                'description': instance.description,
+            })
     return render(request, "work/company-edit.html", context={
         'form': form,
     })
@@ -120,44 +124,56 @@ def company_edit(request):
 
 @login_required
 def mycomp_vacancy_list(request):
+    try:
+        mdl.Company.objects.get(owner__id=request.user.id)
+    except mdl.Company.DoesNotExist:
+        return redirect('comp_edit')
     vac_of_comp = mdl.Vacancy.objects.filter(company__owner__id=request.user.id)
     return render(request, "work/vacancy-list.html", context={
-        'vacancies': vac_of_comp
+        'vacancies': vac_of_comp,
     })
 
 
 @login_required
 def mycomp_vacancy_create(request):
-
+    try:
+        mdl.Company.objects.get(owner__id=request.user.id)
+    except mdl.Company.DoesNotExist:
+        return redirect('comp_edit')
     if request.method == 'POST':
         comp = mdl.Company.objects.get(owner__id=request.user.id)
         form = VacancyForm(request.POST or None)
         if form.is_valid():
-            f = form.save(commit=False)
-            f.posted = date.today()
-            f.company = comp
-            if f.salary_min > f.salary_max:
-                f.salary_min, f.salary_max = f.salary_max, f.salary_min
-            f.save()
+            form_s = form.save(commit=False)
+            form_s.posted = date.today()
+            form_s.company = comp
+            if form_s.salary_min > form_s.salary_max:
+                form_s.salary_min, form_s.salary_max = form_s.salary_max, form_s.salary_min
+            form_s.save()
             return redirect('comp_vac')
     else:
         form = VacancyForm()
     return render(request, "work/vacancy_edit.html", context={
-        'form': form
+        'form': form,
     })
 
 
 @login_required
 def mycomp_vacancy_edit(request, identificator):
-    instance = mdl.Vacancy.objects.get(id=identificator)
+    try:
+        instance = mdl.Vacancy.objects.get(id=identificator)
+    except mdl.Vacancy.DoesNotExist:
+        raise Http404
+    if instance.company.owner.id != request.user.id:
+        return redirect('comp_vac')
     vac_response = mdl.Application.objects.filter(vacancy__id=identificator)
     if request.method == 'POST':
         form = VacancyForm(request.POST or None, instance=instance)
         if form.is_valid():
-            f = form.save(commit=False)
-            if f.salary_min > f.salary_max:
-                f.salary_min, f.salary_max = f.salary_max, f.salary_min
-            f.save()
+            form_s = form.save(commit=False)
+            if form_s.salary_min > form_s.salary_max:
+                form_s.salary_min, form_s.salary_max = form_s.salary_max, form_s.salary_min
+            form_s.save()
             return redirect('comp_vac')
     else:
         form = VacancyForm(initial={
@@ -171,7 +187,7 @@ def mycomp_vacancy_edit(request, identificator):
     return render(request, "work/vacancy_edit.html", context={
         "form": form,
         "responses": vac_response,
-        "count_resp": len(vac_response)
+        "count_resp": len(vac_response),
     })
 
 

@@ -23,7 +23,10 @@ class Migration(migrations.Migration):
                 ('logo', models.ImageField(default='https://place-hold.it/100x60', upload_to='company_images')),
                 ('description', models.TextField()),
                 ('employee_count', models.IntegerField()),
-                ('owner', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('owner', models.OneToOneField(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    to=settings.AUTH_USER_MODEL),
+                 ),
             ],
         ),
         migrations.CreateModel(
@@ -45,8 +48,16 @@ class Migration(migrations.Migration):
                 ('salary_min', models.IntegerField()),
                 ('salary_max', models.IntegerField()),
                 ('posted', models.DateField()),
-                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vacancies', to='work.company')),
-                ('speciality', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='vacancies', to='work.specialty')),
+                ('company', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='vacancies',
+                    to='work.company'),
+                 ),
+                ('speciality', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='vacancies',
+                    to='work.specialty'),
+                 ),
             ],
         ),
         migrations.CreateModel(
@@ -56,8 +67,16 @@ class Migration(migrations.Migration):
                 ('written_username', models.CharField(max_length=50)),
                 ('written_phone', models.IntegerField(max_length=15)),
                 ('written_cover_letter', models.TextField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='applications', to=settings.AUTH_USER_MODEL)),
-                ('vacancy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='applications', to='work.vacancy')),
+                ('user', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='applications',
+                    to=settings.AUTH_USER_MODEL),
+                 ),
+                ('vacancy', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='applications',
+                    to='work.vacancy'),
+                 ),
             ],
         ),
     ]

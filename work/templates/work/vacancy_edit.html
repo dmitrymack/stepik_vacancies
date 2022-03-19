@@ -28,7 +28,9 @@
               </form>
               <!-- END Vacancy info -->
               <!-- Applications -->
-              <h2 class="h4 pt-2 pb-3">Отклики - {{ count_resp }}</h2>
+              {% if count_resp != None %}
+                <h2 class="h4 pt-2 pb-3">Отклики - {{ count_resp }}</h2>
+              {% endif %}
               <!-- Application 1 -->
               {% for resp in responses %}
               <div class="card mt-3">
