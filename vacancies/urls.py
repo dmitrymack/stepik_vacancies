@@ -40,11 +40,8 @@ urlpatterns = [
     path('register', acc.SignUpView.as_view(), name='register'),
     path('login', acc.MyLoginView.as_view(), name='login'),
     path('logout', acc.logout_user, name='logout'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = view.custom404
 handler500 = view.custom500
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
