@@ -5,6 +5,7 @@ from work.forms import CompanyForm, VacancyForm, ApplicationForm, ResumeForm
 from datetime import date
 from random import random
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Не смог придумать, как вывести количество вакансий по компаниям
 # и специальностям на главной странице
@@ -234,6 +235,16 @@ def resume_edit(request):
             })
     return render(request, "work/resume-edit.html", context={
         'form': form,
+    })
+
+
+def search_view(request):
+    s = request.GET.get('s')
+    queryset = mdl.Vacancy.objects.filter(Q(title__icontains=s) | Q(skills__icontains=s) | Q(description__icontains=s))
+    return render(request, "work/search.html", context={
+        'vacancies': queryset,
+        'count': len(queryset),
+        'search': s,
     })
 
 

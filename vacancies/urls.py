@@ -35,6 +35,7 @@ urlpatterns = [
     path('mycompany/vacancies/<int:identificator>/', view.mycomp_vacancy_edit, name='comp_vac_ed'),
     path('resume/letsstart', view.resume_create, name='res_create'),
     path('resume/edit', view.resume_edit, name='res_edit'),
+    path('search', view.search_view, name='search'),
 
     path('register', acc.SignUpView.as_view(), name='register'),
     path('login', acc.MyLoginView.as_view(), name='login'),
