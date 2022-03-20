@@ -1,7 +1,7 @@
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
 from django.shortcuts import render, redirect
 import work.models as mdl
-from work.forms import CompanyForm, VacancyForm, ApplicationForm
+from work.forms import CompanyForm, VacancyForm, ApplicationForm, ResumeForm
 from datetime import date
 from random import random
 from django.contrib.auth.decorators import login_required
@@ -100,7 +100,7 @@ def company_edit(request):
     except mdl.Company.DoesNotExist:
         instance = {}
     if request.method == 'POST':
-        form = CompanyForm(request.POST or None, request.FILES, instance=instance)
+        form = CompanyForm(request.POST or None, request.FILES, instance=instance if instance else None)
         if form.is_valid():
             form_s = form.save(commit=False)
             form_s.owner = request.user
@@ -188,6 +188,52 @@ def mycomp_vacancy_edit(request, identificator):
         "form": form,
         "responses": vac_response,
         "count_resp": len(vac_response),
+    })
+
+
+@login_required
+def resume_create(request):
+    try:
+        mdl.Resume.objects.get(user__id=request.user.id)
+        return redirect('res_edit')
+    except mdl.Resume.DoesNotExist:
+        return render(request, "work/resume-create.html")
+
+
+@login_required
+def resume_edit(request):
+    try:
+        instance = mdl.Resume.objects.get(user__id=request.user.id)
+    except mdl.Resume.DoesNotExist:
+        instance = {}
+
+    if request.method == 'POST':
+        form = ResumeForm(request.POST or None, instance=instance if instance else None)
+        if form.is_valid():
+            form_s = form.save(commit=False)
+            form_s.user = request.user
+            form_s.save()
+            return redirect('main')
+    else:
+        if not instance:
+            form = ResumeForm(initial={
+                'name': request.user.first_name,
+                'surname': request.user.last_name,
+            })
+        else:
+            form = ResumeForm(initial={
+                'name': instance.name,
+                'surname': instance.surname,
+                'status': instance.status,
+                'salary': instance.salary,
+                'specialty': instance.specialty,
+                'grade': instance.grade,
+                'education': instance.education,
+                'experience': instance.experience,
+                'portfolio': instance.portfolio,
+            })
+    return render(request, "work/resume-edit.html", context={
+        'form': form,
     })
 
 

@@ -48,3 +48,29 @@ class Application(models.Model):
 
     def __str__(self):
         pass
+
+
+class Resume(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    status = models.CharField(max_length=25, choices=[
+        ('0', "Не ищу работу"),
+        ('1', "Рассматриваю предложения"),
+        ('2', "Ищу работу")
+    ])
+    salary = models.IntegerField()
+    specialty = models.CharField(max_length=20)
+    grade = models.CharField(max_length=25, choices=[
+        ('0', "Стажер"),
+        ('1', "Джуниор"),
+        ('2', "Миддл"),
+        ('3', "Синьор"),
+        ('4', "Лид")
+    ])
+    education = models.TextField()
+    experience = models.TextField()
+    portfolio = models.URLField()
+
+    def __str__(self):
+        pass

@@ -1,0 +1,17 @@
+{% extends "work/base.html" %}
+{% block content %}
+<!--{% load crispy_forms_tags %}-->
+  <main class="container mt-3 pb-5">
+    <section class="col-12 col-lg-6 offset-lg-3 mt-5 card">
+      <div class="card-body px-3 pb-4">
+        <h1 class="h4 pt-2 pb-3">Мое резюме</h1>
+        <form class="" enctype="multipart/form-data" method="post">
+          <!--{% crispy form "bootstrap3" %}-->
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" class="btn btn-info" value="Сохранить">
+        </form>
+      </div>
+    </section>
+  </main>
+{% endblock content %}

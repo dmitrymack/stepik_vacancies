@@ -32,7 +32,7 @@
                 {{ user.first_name }} {{ user.last_name }}
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Резюме</a>
+                <a class="dropdown-item" href="{% url 'res_create' %}">Резюме</a>
                 <a class="dropdown-item" href="{% url 'comp_create' %}">Компания</a>
                 <a class="dropdown-item" href="{% url 'logout' %}" >Выход</a>
               </div>

@@ -33,6 +33,8 @@ urlpatterns = [
     path('mycompany/vacancies/', view.mycomp_vacancy_list, name='comp_vac'),
     path('mycompany/vacancies/create/', view.mycomp_vacancy_create, name='comp_vac_cr'),
     path('mycompany/vacancies/<int:identificator>/', view.mycomp_vacancy_edit, name='comp_vac_ed'),
+    path('resume/letsstart', view.resume_create, name='res_create'),
+    path('resume/edit', view.resume_edit, name='res_edit'),
 
     path('register', acc.SignUpView.as_view(), name='register'),
     path('login', acc.MyLoginView.as_view(), name='login'),

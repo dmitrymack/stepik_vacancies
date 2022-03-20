@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from work.models import Company, Vacancy, Specialty, Application
+from work.models import Company, Vacancy, Specialty, Application, Resume
 
 
 class CompanyForm(ModelForm):
@@ -38,3 +38,29 @@ class ApplicationForm(ModelForm):
     class Meta:
         model = Application
         fields = ('written_username', 'written_phone', 'written_cover_letter')
+
+
+class ResumeForm(ModelForm):
+    name = forms.CharField(label='Ваше имя', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    surname = forms.CharField(label='Ваша фамилия', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    status = forms.ChoiceField(label='Готовность к работе', choices=[
+        ('0', "Не ищу работу"),
+        ('1', "Рассматриваю предложения"),
+        ('2', "Ищу работу")
+    ])
+    salary = forms.IntegerField(label='Желаемое вознаграждение')
+    specialty = forms.ModelChoiceField(label='Специальность', queryset=Specialty.objects.all(), empty_label=None)
+    grade = forms.ChoiceField(label='Квалификация', choices=(
+        ('0', "Стажер"),
+        ('1', "Джуниор"),
+        ('2', "Миддл"),
+        ('3', "Синьор"),
+        ('4', "Лид")
+    ))
+    education = forms.CharField(label='Образование', widget=forms.Textarea(attrs={'class': 'form-input', 'rows': 3}))
+    experience = forms.CharField(label='Опыт работы', widget=forms.Textarea(attrs={'class': 'form-input', 'rows': 5}))
+    portfolio = forms.URLField(label='Ссылка на портфолио')
+
+    class Meta:
+        model = Resume
+        fields = ('name', 'surname', 'status', 'salary', 'specialty', 'grade', 'education', 'experience', 'portfolio')
