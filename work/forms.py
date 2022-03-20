@@ -46,7 +46,7 @@ class ResumeForm(ModelForm):
     status = forms.ChoiceField(label='Готовность к работе', choices=[
         ('0', "Не ищу работу"),
         ('1', "Рассматриваю предложения"),
-        ('2', "Ищу работу")
+        ('2', "Ищу работу"),
     ])
     salary = forms.IntegerField(label='Желаемое вознаграждение')
     specialty = forms.ModelChoiceField(label='Специальность', queryset=Specialty.objects.all(), empty_label=None)
@@ -55,7 +55,7 @@ class ResumeForm(ModelForm):
         ('1', "Джуниор"),
         ('2', "Миддл"),
         ('3', "Синьор"),
-        ('4', "Лид")
+        ('4', "Лид"),
     ))
     education = forms.CharField(label='Образование', widget=forms.Textarea(attrs={'class': 'form-input', 'rows': 3}))
     experience = forms.CharField(label='Опыт работы', widget=forms.Textarea(attrs={'class': 'form-input', 'rows': 5}))

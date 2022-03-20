@@ -239,12 +239,14 @@ def resume_edit(request):
 
 
 def search_view(request):
-    s = request.GET.get('s')
-    queryset = mdl.Vacancy.objects.filter(Q(title__icontains=s) | Q(skills__icontains=s) | Q(description__icontains=s))
+    res = request.GET.get('s')
+    queryset = mdl.Vacancy.objects.filter(
+        Q(title__icontains=res) | Q(skills__icontains=res) | Q(description__icontains=res),
+    )
     return render(request, "work/search.html", context={
         'vacancies': queryset,
         'count': len(queryset),
-        'search': s,
+        'search': res,
     })
 
 

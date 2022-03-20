@@ -57,7 +57,7 @@ class Resume(models.Model):
     status = models.CharField(max_length=25, choices=[
         ('0', "Не ищу работу"),
         ('1', "Рассматриваю предложения"),
-        ('2', "Ищу работу")
+        ('2', "Ищу работу"),
     ])
     salary = models.IntegerField()
     specialty = models.CharField(max_length=20)
@@ -66,7 +66,7 @@ class Resume(models.Model):
         ('1', "Джуниор"),
         ('2', "Миддл"),
         ('3', "Синьор"),
-        ('4', "Лид")
+        ('4', "Лид"),
     ])
     education = models.TextField()
     experience = models.TextField()
