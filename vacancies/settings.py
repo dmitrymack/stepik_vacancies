@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -136,14 +136,6 @@ MEDIA_ROOT = 'media'
 MEDIA_COMPANY_IMAGE_DIR = 'company_images'
 MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config('CLOUD_NAME', default=""),
-    'API_KEY': config('API_KEY', default=""),
-    'API_SECRET': config('API_SECRET', default=""),
-}
-
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
